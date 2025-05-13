@@ -1,66 +1,63 @@
-#include <string>
+#include <iostream>
 #include <vector>
-#include <queue>
-
+#include <cmath>
+#include <unordered_map>
 using namespace std;
 
-int count(vector<vector<bool>>& g, int start)
-{
-    int count=0;
-    
-    vector<bool> visited(g.size(), false);
-    
-    queue<int> q;
-    
-    q.push(start);
-    
-    while(!q.empty())
-    {
-        int toVisit=q.front();
-        q.pop();
-        if(visited[toVisit])
-            continue;
-        
-        ++count;
-        visited[toVisit]=true;
-        
-        for(int i=1; i<g.size(); ++i)
-        {
-            if(visited[i])
-                continue;
-            
-            if(g[toVisit][i])
-                q.push(i);
-        }
+vector<int> parent;
+vector<int> groupSize;
+
+
+int find(int x) {
+    if (parent[x] != x) {
+        parent[x] = find(parent[x]);
     }
-    return count;
+    return parent[x];
+}
+
+void unite(int x, int y) {
+    int rx = find(x);
+    int ry = find(y);
+    if (rx != ry) {
+        parent[ry] = rx;
+        groupSize[rx] += groupSize[ry];
+    }
 }
 
 int solution(int n, vector<vector<int>> wires) {
-    vector<vector<bool>> g(n+1, vector<bool>(n+1,false));
-    
-    for(auto& w:wires)
-    {
-        g[w[0]][w[1]]=true;
-        g[w[1]][w[0]]=true;
-    }
-        
-    int answer = std::numeric_limits<int>::max();
-    for(auto& w:wires)
-    {
-        g[w[0]][w[1]]=false;
-        g[w[1]][w[0]]=false;
-        
-        int c1=count(g,w[0]);
-        int c2=n-c1;
-        
-        int c=abs(c1-c2);
-        
-        answer=min(c, answer);
-        
-        g[w[0]][w[1]]=true;
-        g[w[1]][w[0]]=true;
+    int minDiff = n;
+
+    for (int i = 0; i < wires.size(); ++i) {
+        parent.assign(n + 1, 0);
+        groupSize.assign(n + 1, 1);
+        for (int j = 1; j <= n; ++j) {
+            parent[j] = j;
+        }
+
+        // i번째 전선을 끊고 나머지로 Union 수행
+        for (int j = 0; j < wires.size(); ++j) {
+            if (i == j) continue;
+            int a = wires[j][0];
+            int b = wires[j][1];
+            unite(a, b);
+        }
+
+        // 그룹 크기 계산
+        unordered_map<int, int> group;
+        for (int k = 1; k <= n; ++k) {
+            int root = find(k);
+            group[root]++;
+        }
+
+        // 두 그룹의 차이 계산
+        if (group.size() == 2) {
+            auto it = group.begin();
+            int a = it->second;
+            ++it;
+            int b = it->second;
+            minDiff = min(minDiff, abs(a - b));
+        }
     }
 
-    return answer;
+    return minDiff;
 }
