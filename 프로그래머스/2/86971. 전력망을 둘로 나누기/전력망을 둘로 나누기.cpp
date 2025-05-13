@@ -52,7 +52,7 @@ int solution(int n, vector<vector<int>> wires) {
         g[w[1]][w[0]]=false;
         
         int c1=count(g,w[0]);
-        int c2=count(g,w[1]);
+        int c2=n-c1;
         
         int c=abs(c1-c2);
         
