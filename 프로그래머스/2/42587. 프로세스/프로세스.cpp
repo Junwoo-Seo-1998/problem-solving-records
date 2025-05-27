@@ -3,31 +3,27 @@
 using namespace std;
 
 int solution(vector<int> priorities, int location) {
-    queue<pair<int, int>> q;
-    vector<int> count(10, 0);
+    queue<pair<int, int>> q; // (index, priority)
+    priority_queue<int> pq;  // max heap
 
     for (int i = 0; i < priorities.size(); ++i) {
         q.push({i, priorities[i]});
-        count[priorities[i]]++;
+        pq.push(priorities[i]);
     }
 
-    int print_order = 0;
+    int order = 0;
 
     while (!q.empty()) {
-        auto [idx, priority] = q.front(); 
-        q.pop();
+        auto [idx, prio] = q.front(); q.pop();
 
-        int max_priority = 9;
-        while (count[max_priority] == 0) max_priority--;
-
-        if (priority < max_priority) {
-            q.push({idx, priority}); 
-        } else {
-            print_order++;
-            count[priority]--;
-
+        // 현재 우선순위가 최고인지 확인
+        if (prio == pq.top()) {
+            pq.pop();
+            order++;
             if (idx == location)
-                return print_order;
+                return order;
+        } else {
+            q.push({idx, prio});  // 다시 뒤로
         }
     }
 
