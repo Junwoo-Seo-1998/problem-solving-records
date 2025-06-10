@@ -1,7 +1,6 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-
 using namespace std;
 
 vector<int> solution(vector<vector<int>> edges) {
@@ -23,18 +22,14 @@ vector<int> solution(vector<vector<int>> edges) {
         
         if(out==0)
             answer[2]++;
-        else if(out==1)
-            continue;
         else if(out==2)
         {
-            if(in==0)
-            {
+            if(in==2)
+                answer[3]++;
+            else
                 answer[0]=p.first;
-                continue;
-            }
-            answer[3]++;
         }
-        else
+        else if(out>=3)
         {
             if(in==0)
                 answer[0]=p.first;
