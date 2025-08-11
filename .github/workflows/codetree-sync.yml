@@ -11,9 +11,10 @@ jobs:
 
     steps:
       - name: Checkout algorithm repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          token: ${{ secrets.CODETREE_PAT }}
 
       - name: Set Git config
         run: |
@@ -22,7 +23,7 @@ jobs:
 
       - name: Add codetree remote
         run: |
-          git remote add Codetree-remote https://${{ secrets.CODETREE_PAT }}@github.com/Junwoo-Seo-1998/Codetree.git
+          git remote add Codetree-remote https://github.com/Junwoo-Seo-1998/Codetree.git
           git fetch Codetree-remote
 
       - name: Pull codetree subtree
