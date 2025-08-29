@@ -3,15 +3,18 @@
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
-
+#include <cstring>
 using namespace std;
 
 struct ColorTrie {
     struct Node {
-        unordered_map<char, int> childIndex;
+        //unordered_map<char, int> childIndex;
+        int childIndex[26];
         bool isColorEnd; 
 
-        Node() : isColorEnd(false) {}
+        Node() : isColorEnd(false) {
+            memset(childIndex, -1, sizeof(childIndex));
+        }
     };
 
     vector<Node> nodes;
@@ -23,11 +26,11 @@ struct ColorTrie {
     void insert(const string& str) {
         int cur = 0;
         for (char c : str) {
-            if (nodes[cur].childIndex.count(c) == 0) {
-                nodes[cur].childIndex[c] = nodes.size();
+            if (nodes[cur].childIndex[c-'a'] == -1) {
+                nodes[cur].childIndex[c-'a'] = nodes.size();
                 nodes.emplace_back();
             }
-            cur = nodes[cur].childIndex[c];
+            cur = nodes[cur].childIndex[c-'a'];
         }
         nodes[cur].isColorEnd = true; 
     }
@@ -64,12 +67,11 @@ int main() {
         int currentNodeIndex = 0; 
 
         for (int i = 0; i < word.length(); ++i) {
-            char c = word[i];
 
-            if (colorTrie.nodes[currentNodeIndex].childIndex.count(c) == 0) {
+            if (colorTrie.nodes[currentNodeIndex].childIndex[word[i]-'a'] == -1) {
                 break;
             }
-            currentNodeIndex = colorTrie.nodes[currentNodeIndex].childIndex.at(c);
+            currentNodeIndex = colorTrie.nodes[currentNodeIndex].childIndex[word[i]-'a'];
 
             if (colorTrie.nodes[currentNodeIndex].isColorEnd) {
 
