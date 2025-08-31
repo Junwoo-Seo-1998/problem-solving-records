@@ -73,7 +73,7 @@ int simulate()
     {//모든 원소 이동
         for (int i = 0; i < v.size(); ++i)
         {
-            Node now = v[i];//하나씩 확인
+            Node& now = v[i];//하나씩 확인
 
             if (!now.isAlive) continue;
 
@@ -105,7 +105,7 @@ int simulate()
         //ans+=확인하는 원자의 에너지 모두 소멸
         for (int i = 0; i < v.size(); ++i)
         {
-            Node now = v[i];
+            Node& now = v[i];
             if (!now.isAlive) continue;
 
             //2개 이상의 원자가 모두 충돌한다면
