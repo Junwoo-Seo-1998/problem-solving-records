@@ -5,6 +5,15 @@
 #include <queue>
 #include <vector>
 using namespace std;
+
+/*
+구상 아이이디어는
+내 앞에 내 뒤에 몇 명이 있는지 알면 내순위를 알수있음
+그런데 그숫자가 정확히 N이랑 일치해야 정확히 알 수 있으니까
+N==앞+뒤+1(나) 가 성립하는지 보면됨
+*/
+
+
 int N, M;
 
 vector<vector<int>> map;
@@ -63,7 +72,7 @@ void solve()
 	int ans = 0;
 	for (int i = 1; i <= N; ++i)
 	{
-		//count how many pep
+		//count
 		int before = howMany(i, true);
 		int after = howMany(i, false);
 
