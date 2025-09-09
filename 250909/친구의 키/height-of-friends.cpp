@@ -8,15 +8,21 @@ using namespace std;
 int n, m;
 int a[100000], b[100000];
 
-int visited[100'001];
+bool visited[100'001];
 vector<int> edge[100'001];
 
 stack<int> sorted;
 
-void dfs()
+void dfs(int cur)
 {
+    for(int next:edge[cur])
+    {
+        if(visited[next]) continue;
+        visited[next]=true;
+        dfs(next);
+    }
 
-    sorted.push();
+    sorted.push(cur);
 }
 
 
@@ -33,7 +39,21 @@ int main() {
         edge[a[i]].push_back(b[i]);
     }
 
+    for(int i=1; i<n; ++i)
+    {
+        if(visited[i]!=true)
+        {
+            visited[i]=true;
+            dfs(i);
+        }
+    }
+
 
     while(!sorted.empty())
+    {
+        cout<<sorted.top()<<' ';
+        sorted.pop();
+    }
+
     return 0;
 }
